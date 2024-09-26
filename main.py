@@ -19,32 +19,31 @@ url = "https://stackoverflow.com/questions/1735109/setting-python-interpreter-in
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
-paragraphs = [p.get_text() for p in soup.find_all('p')]
+heading = soup.find('h1').get_text()
 
-clean_text = re.sub(r'\s+', ' ', ' '.join(paragraphs))
-clean_text = re.sub(r'[^\w\s]', '', clean_text)
+print(heading)
 
-sentences = sent_tokenize(clean_text)
+# clean_text = re.sub(r'\s+', ' ', ' '.join(paragraphs))
+# clean_text = re.sub(r'[^\w\s]', '', clean_text)
 
-tokens = word_tokenize(clean_text.lower())
-
-vectoriser = TfidfVectorizer()
-sentence_vectors = vectoriser.fit_transform(sentences)
+# sentences = sent_tokenize(clean_text)
+#
+# tokens = word_tokenize(clean_text.lower())
 
 trainer = ListTrainer(chatbot)
 trainer.train([
     "hello",
     "Welcome, what program error can I help you solve?",
 ])
-trainer.train(paragraphs)
+trainer.train(heading)
 
 def answer_questions(query):
     tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-    model = GPT2LMHeadModel.from_pretrained("gpt2")
+    model = GPT2LMHeadModel.from_pretrained("gpt2").to('cpu')
     
     input_ids = tokenizer.encode(query, return_tensors="pt")
     
-    output = model.erate(input_ids, max_length=100)
+    output = model.generate(input_ids, max_length=100)
     response = tokenizer.decode(output[0], skip_special_tokens=True)
     
     return response;
