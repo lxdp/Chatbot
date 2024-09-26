@@ -19,10 +19,6 @@ url = "https://stackoverflow.com/questions/1735109/setting-python-interpreter-in
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
-heading = soup.find('h1').get_text()
-
-print(heading)
-
 # clean_text = re.sub(r'\s+', ' ', ' '.join(paragraphs))
 # clean_text = re.sub(r'[^\w\s]', '', clean_text)
 
@@ -35,18 +31,21 @@ trainer.train([
     "hello",
     "Welcome, what program error can I help you solve?",
 ])
-trainer.train(heading)
 
 def answer_questions(query):
-    tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-    model = GPT2LMHeadModel.from_pretrained("gpt2").to('cpu')
     
-    input_ids = tokenizer.encode(query, return_tensors="pt")
+    heading = soup.find('h1').get_text()
     
-    output = model.generate(input_ids, max_length=100)
-    response = tokenizer.decode(output[0], skip_special_tokens=True)
+    print(heading)
     
-    return response;
+    documents = [heading, query]
+    
+    vectorizer = TfidfVectorizer()
+    tfid_matrix = vectorizer.fit_transform(documents)
+    
+    cos_simularity = cosine_similarity(tfid_matrix[0:1], tfid_matrix[1:2])
+    
+    print(cos_simularity)
     
 
 exit_conditions = (":q", "quit", "exit")
