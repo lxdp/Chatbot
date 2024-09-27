@@ -45,7 +45,16 @@ def answer_questions(query):
     
     cos_simularity = cosine_similarity(tfid_matrix[0:1], tfid_matrix[1:2])
     
-    print(cos_simularity)
+    if cos_simularity >= 0.2:
+        div = soup.find('div', class_='s-prose js-post-body')
+        
+        if div:
+            text = div.get_text(strip = True)
+    
+    if text:
+        return text
+    else:
+        return "We could not find what you are looking for"
     
 
 exit_conditions = (":q", "quit", "exit")
