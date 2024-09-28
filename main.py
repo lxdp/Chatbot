@@ -18,11 +18,6 @@ chatbot = ChatBot("Chatbot")
 url = "https://stackoverflow.com/questions/1735109/setting-python-interpreter-in-eclipse-mac"
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
-trainer = ListTrainer(chatbot)
-trainer.train([
-    "hello",
-    "Welcome, what program error can I help you solve?",
-])
 
 def answer_questions(query):
     
