@@ -18,14 +18,6 @@ chatbot = ChatBot("Chatbot")
 url = "https://stackoverflow.com/questions/1735109/setting-python-interpreter-in-eclipse-mac"
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
-
-# clean_text = re.sub(r'\s+', ' ', ' '.join(paragraphs))
-# clean_text = re.sub(r'[^\w\s]', '', clean_text)
-
-# sentences = sent_tokenize(clean_text)
-#
-# tokens = word_tokenize(clean_text.lower())
-
 trainer = ListTrainer(chatbot)
 trainer.train([
     "hello",
